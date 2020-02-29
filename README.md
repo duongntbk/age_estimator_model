@@ -196,7 +196,7 @@ At this epoch, our network reached 96.67% test accuracy, while test loss is only
 
 # Train age guessing model
 
-**Note**: the training process for age guessing is largely the same as the training process of gender prediction. We only include minimal explanation in this section.
+**Note**: the training process for age guessing is largely the same as the training process of gender prediction. We only include minimal explanation in this section. Also, because the loss value (mean squared error) is much bigger than mean absolute error value, when drawing graphs, we took the log value of mean squared error.
 
 Create an object of class AgeModel and use it to create model for feature extraction.
 
