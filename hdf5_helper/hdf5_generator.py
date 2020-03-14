@@ -10,11 +10,11 @@ class HDF5Generator:
     Generator to generate training/validation/test data from hdf5 file.
     '''
 
-    def __init__(self, db_path, is_categorical, batch_size=128, preprocessors=None, augumentator=None):
+    def __init__(self, db_path, is_categorical, batch_size=128, preprocessors=None, augmentator=None):
         self.batch_size = batch_size
         self.is_categorical = is_categorical
         self.preprocessors = preprocessors
-        self.augumentator = augumentator
+        self.augmentator = augmentator
 
         self.db = h5py.File(db_path)
         self.db_size = self.db['labels'].shape[0]
@@ -41,9 +41,9 @@ class HDF5Generator:
                     for preprocessor in self.preprocessors:
                         images = preprocessor.process(images)
 
-                # Perform data augumentation if needed
-                if self.augumentator is not None:
-                    images, labels = next(self.augumentator.flow(images, labels, batch_size=self.batch_size))
+                # Perform data augmentation if needed
+                if self.augmentator is not None:
+                    images, labels = next(self.augmentator.flow(images, labels, batch_size=self.batch_size))
                 
                 yield images, labels
             

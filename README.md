@@ -6,6 +6,9 @@ The resulting model can be used with the AgeEstimatorSharp library, details in t
 
 https://github.com/duongntbk/AgeEstimatorSharp
 
+See the following repository also for a combined model named AgeGenderNet which can use gender information while guessing age:
+https://github.com/duongntbk/AgeGenderNet
+
 **Note**: due to the size of the dataset and the complexity of the network, it is highly recommended to train these models using CUDA enabled GPU. Training on CPU is possible but will take a very long time, measures in days, perhaps weeks.
 
 # Menu
@@ -74,7 +77,7 @@ data
              └── image_nnnn.png
 ```
 
-Where *15*, *16*... are the age; and 111 or 112 is gender code, 111 for female and 112 for male.
+Where *15*, *16*... are the age; and 111 or 112 is gender code, 111 for male and 112 for female.
 
 ## Convert data into hdf5 format
 
@@ -130,7 +133,7 @@ By default, generator for training, validation and test dataset are created auto
 
     from hdf5_helper.hdf5_generator import HDF5Generator
 
-    training_generator = HDF5Generator(db_path='my_path/my_training_data.h5', batch_size=32, is_categorical=False, preprocessors=None, augumentator=None)
+    training_generator = HDF5Generator(db_path='my_path/my_training_data.h5', batch_size=32, is_categorical=False, preprocessors=None, augmentator=None)
 
     bm = GenderModel(conv_base=base, num_gpus=2, training_generator=training_generator)
 

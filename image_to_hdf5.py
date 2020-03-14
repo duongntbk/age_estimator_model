@@ -25,8 +25,8 @@ from hdf5_helper.hdf5_writer import HDF5Writer
 def split_by_gender(data_dir):
     '''
     Label each image as either male or female.
-    All female images are stored in folder named "111",
-    while male images are stored in folder named "112".
+    All female images are stored in folder named "112",
+    while male images are stored in folder named "111".
 
     Returns: a tuple of 2 arrays of the same length.
     The first array is the path to each image,
@@ -34,7 +34,7 @@ def split_by_gender(data_dir):
     '''
 
     data_paths = list(paths.list_images(data_dir))
-    labels = ['female' if n.split(os.path.sep)[-2] == '111' else 'male' for n in data_paths]
+    labels = ['0' if n.split(os.path.sep)[-2] == '111' else '1' for n in data_paths]
 
     if len(data_paths) == 0:
         return None, None
@@ -63,36 +63,6 @@ def split_by_age(data_dir):
     labels = [int(n.split(os.path.sep)[-3]) for n in data_paths]
 
     return data_paths, labels
-
-def split_by_age_gender(data_dir, gender_code):
-    data_paths = [n for n in list(paths.list_images(data_dir)) if n.split(os.path.sep)[-2] == gender_code]
-
-    if len(data_paths) == 0:
-        return None, None
-
-    labels = [int(n.split(os.path.sep)[-3]) for n in data_paths]
-
-    return data_paths, labels
-
-def split_by_age_category(data_dir):
-    data_paths = list(paths.list_images(data_dir))
-
-    if len(data_paths) == 0:
-        return None, None
-
-    labels = [n.split(os.path.sep)[-3] for n in data_paths]
-    labels = [n if int(n) <= 40 else "Over 40" for n in labels]
-
-    le = LabelEncoder()
-    labels = le.fit_transform(labels)
-
-    return data_paths, labels
-
-def split_by_age_male(data_dir):
-    return split_by_age_gender(data_dir, '111')
-
-def split_by_age_female(data_dir):
-    return split_by_age_gender(data_dir, '112')
 
 def write_data_to_hdf5(data_dir, split_method, output_dir, set_split=0.2, channels_first=False):
     data_paths, labels = split_method(data_dir)

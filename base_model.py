@@ -11,7 +11,7 @@ from callback.epoch_checkpoint import EpochCheckpoint
 from callback.training_monitor import TrainingMonitor
 from hdf5_helper.hdf5_generator import HDF5Generator
 from preprocessor.mean_preprocessor import MeanPreprocessor
-from preprocessor.one_zero_preprocessor import OneZeroPreprocessor
+from preprocessor.divide_preprocessor import DividePreprocessor
 
 
 class BaseModel:
@@ -22,9 +22,9 @@ class BaseModel:
     def __init__(self, conv_base, num_gpus, train_generator=None, validation_generator=None, test_generator=None):
         '''
         If train_generator is not specified,
-        a generator which apply augumentation and both preprocessors will be created.
+        a generator which apply augmentation and both preprocessors will be created.
         Validation_generator and test_generator can also be created automatically,
-        but we do not apply augumentation on validation_generator and test_generator.
+        but we do not apply augmentation on validation_generator and test_generator.
         '''
 
         backend.set_learning_phase(0) # must set this to enable training on ResNet
@@ -41,8 +41,8 @@ class BaseModel:
             training_path = path_join(self.hdf5_path, 'training.hdf5')
             self.train_generator = HDF5Generator(training_path, batch_size=64,
                 is_categorical=False,
-                preprocessors=[MeanPreprocessor(mean_json_path), OneZeroPreprocessor()],
-                augumentator=aug)
+                preprocessors=[MeanPreprocessor(mean_json_path), DividePreprocessor(127.5)],
+                augmentator=aug)
         else:
             self.train_generator = train_generator
 
@@ -50,7 +50,7 @@ class BaseModel:
             validation_path = path_join(self.hdf5_path, 'validation.hdf5')
             self.validation_generator = HDF5Generator(validation_path, batch_size=64,
                 is_categorical=False,
-                preprocessors=[MeanPreprocessor(mean_json_path), OneZeroPreprocessor()])
+                preprocessors=[MeanPreprocessor(mean_json_path), DividePreprocessor(127.5)])
         else:
             self.validation_generator = validation_generator
         
@@ -58,7 +58,7 @@ class BaseModel:
             test_path = path_join(self.hdf5_path, 'test.hdf5')
             self.test_generator = HDF5Generator(test_path, batch_size=64,
                 is_categorical=False,
-                preprocessors=[MeanPreprocessor(mean_json_path), OneZeroPreprocessor()])
+                preprocessors=[MeanPreprocessor(mean_json_path), DividePreprocessor(127.5)])
         else:
             self.test_generator = test_generator
 

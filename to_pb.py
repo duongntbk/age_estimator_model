@@ -64,7 +64,7 @@ def convert_h5_to_pb(h5_path, output_dir, output_name):
     '''
 
     model = load_model(h5_path)
-    frozen_graph = freeze_session(backend.get_session(), output_names=model.output_names)
+    frozen_graph = freeze_session(backend.get_session(), output_names=[out.op.name for out in model.outputs])
     tf.io.write_graph(frozen_graph, output_dir, output_name, as_text=False)
 
 def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
